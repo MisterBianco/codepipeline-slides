@@ -1,0 +1,143 @@
+\documentclass{beamer}
+\usepackage{hyperref}
+
+\usetheme{metropolis}
+
+\title{AWS Codepipelines}
+\date{\today}
+\author{Jarad Dingman}
+
+\begin{document}
+  \maketitle
+
+  \section{About Me}
+
+    \begin{frame}{About Me}
+      I am a \textit{senior Devops Engineer} at \textbf{Western Governors University}, 
+      I was a student at Dixie State from 2015-2018 (Francoms Favorite) and am pursuing 
+      my Bachelors in CS and IT.
+
+      \textbf{Socials}:
+      \begin{itemize}
+        \item @Misterbianco (Github)
+        \item @Jarad.Dingman (Linkedin) - Send me a connection request
+        \item I don't use other social medias and neither should you.
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Note}
+      These slides were created using \LaTeX and are available on my Github
+      Feel free to download and compile them at: 
+        \url{https://github.com/misterbianco/codepipeline-slides}
+    \end{frame}
+
+  \section{Disclaimer}
+
+    \begin{frame}{Disclaimer}
+      While I believe AWS has many great offerings I am still rather divided
+      on how much I can recommend Codepipelines due to the lack of certain key
+      features including:
+
+      \begin{itemize}
+        \item Filtering on commit message
+        \item Filtering on changed files
+        \item Filtering on release and/or tagging
+        \item Spawn time (very hit and miss)
+      \end{itemize}
+
+      Thus I have been actively helping my team use Github Actions where possible.
+    \end{frame}
+
+    \begin{frame}{Disclaimer}
+      \textit{WGU is very early in its devops journey and is far from mature.
+      I will explain how we do things and where necessary discuss a better way
+      that we havent adopted yet.}
+    \end{frame}
+
+  % Begin actual presentation ----------------------------------
+
+  \section{Codepipeline}
+
+    \begin{frame}{How WGU uses Codepipeline}
+      As is typical with many if not most organizations, we \textbf{DO NOT} 
+      allow users, especially not software engineers to push code directly 
+      into production. That would be catastrophic and have a severe impact
+      on our SLA's.
+
+      \vfill
+      \textit{Instead we use codepipeline to deploy our infrastructure and code}
+    \end{frame}
+
+  \section{Service Catalog}
+    \begin{frame}{Service Catalog}
+      Service catalog is used to deploy pipelines.
+
+      This service allows the creation of templates that developers can
+      select as necessary to create their pipelines and infra.
+
+      \vfill
+      \textbf{Better way}: Infrastructure as Code
+    \end{frame}
+
+    \begin{frame}{Pipelines}
+      After a developer has selected their template and provided the
+      required information they must create their teams infrastructure.
+
+      These components are their:
+      \begin{itemize}
+        \item application cluster
+        \item messaging queue
+        \item route53 records
+        \item databases
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Pipelines II}
+      With your teams infra setup and the pipeline started the team can now
+      focus on writing their applications.
+
+      Pipelines at WGU typically are composed of the following stages:
+      \begin{itemize}
+        \item Source
+        \item Build
+        \item Scan
+        \item Deploy
+        \item Test
+        \item Reroute (in the case of Blue Green deployments)
+      \end{itemize}
+    \end{frame}
+
+  \section{Stages}
+    \begin{frame}{Source}
+      This stage is self explanatory, we clone the repo at the 
+      given commit and pass it as an artifact to subsequent stages.
+    \end{frame}
+
+    \begin{frame}{Build}
+      In this stage we accept the artifact from our previous stage
+      and we use a bash script present in the codebase to build the
+      application.
+    \end{frame}
+
+    \begin{frame}{Scan}
+      In this stage we take the built artifact and we leverage tools
+      to scan the artifact for vulnerabilities and other issues.
+    \end{frame}
+
+    \begin{frame}{Deploy}
+      If we passed the scanning stage we then deploy the application
+      into its respective environment.
+    \end{frame}
+
+    \begin{frame}{Test}
+      Depending on your application type we do various rounds of testing.
+      The most common application type is a web application and thus we
+      run tests using postman.
+    \end{frame}
+
+  \section{Demo}
+    \begin{frame}{}
+
+    \end{frame}
+
+\end{document}
